@@ -1,1 +1,2 @@
-export const baseUrl = 'https://906d-114-79-167-126.in.ngrok.io';
+export const baseUrl = 'https://yatra-backend-production.up.railway.app';
+// export const baseUrl = 'http://localhost:8000';

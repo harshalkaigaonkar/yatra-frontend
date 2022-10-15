@@ -6,6 +6,7 @@ const authReducer = (state, action) => {
 	switch (action.type) {
 		case 'login': {
 			return {
+				...state,
 				accessToken: action.payload.accessToken,
 				refreshToken: action.payload.refreshToken,
 				firstName: action.payload.firstName,
@@ -14,6 +15,7 @@ const authReducer = (state, action) => {
 		}
 		case 'logout': {
 			return {
+				...state,
 				accessToken: '',
 				refreshToken: '',
 				firstName: '',

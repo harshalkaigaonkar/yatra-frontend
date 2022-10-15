@@ -34,7 +34,7 @@ const Tags = ({ showModal }) => {
 					};
 				})
 			);
-		});
+		}).catch((err) => console.log(err));
 	}, []);
 
 	const selectTag = (id) => {

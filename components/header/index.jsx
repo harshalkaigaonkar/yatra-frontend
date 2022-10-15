@@ -17,19 +17,29 @@ const Header = ({ route, navigation }) => {
 		<View style={styles.container}>
 			<Text style={styles.appName}>Yatra</Text>
 			<View style={styles.rp}>
-				<TouchableNativeFeedback
-					onPress={() => {
-						navigation.navigate('Schedule');
-					}}
-				>
-					<View style={styles.icon}>
-						{route.name === 'Home' || route.name === 'Schedule' ? (
-							<Icon name='layer-group' size={30} color='black' />
+						{route.name === 'Schedule' ? (
+							<TouchableNativeFeedback
+										onPress={() => {
+											navigation.navigate('Home');
+										}}
+									>
+								<View style={styles.icon}>
+									<Icon name='layer-group' size={30} color='black' />
+								</View>
+							</TouchableNativeFeedback>
 						) : (
-							<Icon name='calendar' size={30} color='black' />
+							<TouchableNativeFeedback
+									onPress={() => {
+										navigation.navigate('Schedule');
+									}}
+								>
+								<View style={styles.icon}>
+									<Icon name='calendar' size={30} color='black' />
+								</View>
+							</TouchableNativeFeedback>
 						)}
-					</View>
-				</TouchableNativeFeedback>
+					{/* </View>
+				</TouchableNativeFeedback> */}
 			</View>
 		</View>
 	);
@@ -50,7 +60,7 @@ const styles = {
 	},
 	appName: {
 		fontSize: 20,
-		fontWeight: '900',
+		fontWeight: "900",
 	},
 	rp: {
 		width: 'auto',

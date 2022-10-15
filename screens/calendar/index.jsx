@@ -9,6 +9,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Agenda } from 'react-native-calendars';
 import { Card, Avatar, Button, Text, Modal } from 'react-native-paper';
 import Header from '../../components/header';
+import ModalComponent from '../../components/modal/modal';
+import { BottomSheet } from 'react-native-btr';
+import AddEventComponent from '../../components/event/addEventComponent';
+import { getLogs } from '../../apis/logsapi';
+import { useAuth } from '../../contexts/AuthContext';
+import CreateLogComponent from '../../components/logs/createlogcomponent';
 
 const timeToString = (time) => {
 	const date = new Date(time);
@@ -17,15 +23,22 @@ const timeToString = (time) => {
 
 const Schedule = ({ route, navigation }) => {
 	const [items, setItems] = useState({});
-	const [date, setDate] = useState(new Date());
+	const [logs, setLogs] = useState([]);
 	const [visble, setVisible] = useState(false);
 	const [markedDates, setMarkedDates] = useState({});
 	const [eventModalVisible, setEventModalVisible] = useState(false);
-	const [showDatePicker, setShowDatePicker] = useState(false);
 	const showModal = () => setVisible(true);
 	const showEventModal = () => setEventModalVisible(true);
 	const hideModal = () => setVisible(false);
 	const hideEventModal = () => setEventModalVisible(false);
+
+	const { state } = useAuth();
+
+	useEffect(() => {
+		getLogs(state.accessToken).then((data) => {
+			setLogs(data);
+		});
+	}, []);
 
 	const json = [
 		{
@@ -83,6 +96,8 @@ const Schedule = ({ route, navigation }) => {
 		return dates;
 	};
 
+	const handleCreateLog = () => {};
+
 	const loadItems = (day) => {
 		setTimeout(() => {
 			for (let i = -15; i < 85; i++) {
@@ -90,9 +105,9 @@ const Schedule = ({ route, navigation }) => {
 				const strTime = timeToString(time);
 				if (!items[strTime]) {
 					items[strTime] = [];
-					const numItems = Math.floor(Math.random() * 3 + 1);
-					for (let j = 0; j < numItems; j++) {
+					for (let j = 0; j < 1; j++) {
 						items[strTime].push({
+							type: 'add-event',
 							name: 'Item for ' + strTime + ' #' + j,
 							height: Math.max(50, Math.floor(Math.random() * 150)),
 						});
@@ -110,146 +125,109 @@ const Schedule = ({ route, navigation }) => {
 	const renderItem = (item) => {
 		return (
 			<TouchableOpacity style={{ marginRight: 10, marginTop: 17 }}>
-				<Card>
-					<Card.Content>
-						<View
+				{item.type === 'add-event' ? (
+					<Button icon='plus' mode='contained' onPress={showEventModal}>
+						<Text
 							style={{
-								flexDirection: 'row',
-								justifyContent: 'space-between',
-								alignItems: 'center',
+								color: 'white',
 							}}
 						>
-							<Text>{item.name}</Text>
-							<Avatar.Text label='J' />
-						</View>
-					</Card.Content>
-				</Card>
+							Add Event
+						</Text>
+					</Button>
+				) : (
+					<Card>
+						<Card.Content>
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									alignItems: 'center',
+								}}
+							>
+								<Text>{item.name}</Text>
+								<Avatar.Text label='J' />)
+							</View>
+						</Card.Content>
+					</Card>
+				)}
 			</TouchableOpacity>
 		);
 	};
 
 	return (
-		<View style={{ flex: 1 }}>
-			<Header route={route} navigation={navigation} />
-			<View
-				style={{
-					width: Dimensions.get('window').width,
-					backgroundColor: 'white',
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					paddingLeft: 18,
-					paddingRight: 18,
-				}}
-			>
-				<Text variant='titleLarge'>My Travel Log</Text>
-				<TouchableNativeFeedback>
-					<Button
-						icon='plus'
-						mode='elevated'
-						buttonColor='white'
-						style={{
-							backgroundColor: '#fff',
-							margin: 10,
-							width: 100,
-							borderWidth: 2,
-							borderColor: '#CF9FFF',
-							borderRadius: 30,
-							height: 45,
-						}}
-					>
-						New
-					</Button>
-				</TouchableNativeFeedback>
+		<>
+			<View style={{ flex: 1 }}>
+				<Header route={route} navigation={navigation} />
+				<View
+					style={{
+						width: Dimensions.get('window').width,
+						backgroundColor: 'white',
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						alignItems: 'center',
+						paddingLeft: 18,
+						paddingRight: 18,
+					}}
+				>
+					<Text variant='titleLarge'>My Travel Log</Text>
+					<TouchableNativeFeedback>
+						<Button
+							onPress={showModal}
+							icon='plus'
+							mode='elevated'
+							buttonColor='white'
+							style={{
+								margin: 10,
+								width: 100,
+								borderWidth: 2,
+								borderColor: '#CF9FFF',
+								borderRadius: 30,
+								height: 45,
+							}}
+						>
+							New
+						</Button>
+					</TouchableNativeFeedback>
+				</View>
+				<Agenda
+					style={{
+						height: Dimensions.get('window').height - 200,
+					}}
+					items={items}
+					loadItemsForMonth={loadItems}
+					selected={new Date().toISOString().split('T')[0]}
+					renderItem={renderItem}
+					showScrollIndicator={true}
+					minDate={'2022-01-01'}
+					maxDate={'2022-12-31'}
+					theme={{
+						agendaKnobColor: 'black',
+						selectedDayBackgroundColor: 'black',
+						selectedDayColor: 'black',
+						textDayFontWeight: '900',
+						agendaKnobHeight: 100,
+					}}
+					onDayLongPress={(data) => console.log(data)}
+					markingType='period'
+					markedDates={markedDatesFunc()}
+				/>
 			</View>
-			<Agenda
-				style={{ flexDirection: 'column', height: 1000 }}
-				items={items}
-				loadItemsForMonth={loadItems}
-				selected={new Date().toISOString().split('T')[0]}
-				renderItem={renderItem}
-				showScrollIndicator={true}
-				minDate={'2010-01-01'}
-				maxDate={'2025-12-31'}
-				theme={{
-					agendaKnobColor: 'black',
-					selectedDayBackgroundColor: 'black',
-					selectedDayColor: 'black',
-					textDayFontWeight: '900',
-					agendaKnobHeight: 100,
-				}}
-				onDayLongPress={(data) => console.log(data)}
-				markingType='period'
-				markedDates={markedDatesFunc()}
-			/>
-			<ModalComponent visible={visble} hideModal={hideModal}>
-				<View
-					style={{
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-						marginBottom: 20,
-					}}
-				>
-					<Text
-						style={{
-							fontSize: 20,
-							fontWeight: 'bold',
-							textAlign: 'center',
-						}}
-					>
-						Start from:{' '}
-					</Text>
-					<Button onPress={() => setShowDatePicker(true)}>Select date</Button>
-				</View>
-				{showDatePicker && (
-					<DateTimePicker
-						testID='dateTimePicker'
-						value={date}
-						mode={'date'}
-						onChange={(event, selectedDate) => {
-							const currentDate = selectedDate;
-							setShow(false);
-							setDate(currentDate);
-						}}
-					/>
-				)}
-				<Button
-					style={{
-						backgroundColor: '#CF9FFF',
-					}}
-					onPress={handleCreateLog}
-				>
-					<Text
-						style={{
-							color: 'white',
-						}}
-					>
-						Confirm
-					</Text>
-				</Button>
-			</ModalComponent>
-			<ModalComponent visible={eventModalVisible} hideModal={hideEventModal}>
-				<View
-					style={{
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-						marginBottom: 20,
-					}}
-				>
-					<Text
-						style={{
-							fontSize: 20,
-							fontWeight: 'bold',
-							textAlign: 'center',
-						}}
-					>
-						Start from:{' '}
-					</Text>
-				</View>
-			</ModalComponent>
-		</View>
+			<BottomSheet
+				visible={eventModalVisible}
+				onBackButtonPress={hideEventModal}
+				onBackdropPress={hideEventModal}
+			>
+				<AddEventComponent />
+			</BottomSheet>
+			<BottomSheet
+				visible={visble}
+				onBackButtonPress={hideModal}
+				onBackdropPress={hideModal}
+			>
+				<CreateLogComponent hideModal={hideModal} />
+			</BottomSheet>
+		</>
 	);
 };
 

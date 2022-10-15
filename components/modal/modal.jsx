@@ -3,7 +3,6 @@ import {
 	Portal,
 	Provider,
 } from 'react-native-paper';
-import { Dimensions } from 'react-native';
 
 export default function ModalComponent({
   visible,
@@ -13,7 +12,8 @@ export default function ModalComponent({
   const containerStyle = {
 		backgroundColor: 'white',
 		padding: 20,
-		height: Dimensions.get('window').height * 0.4,
+		position: 'absolute',
+		// height: Dimensions.get('window').height * 0.4,
 	};
 	return (
 		<Provider>

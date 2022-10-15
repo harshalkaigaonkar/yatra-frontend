@@ -13,14 +13,6 @@ const Header = ({route}) => {
      <Text style={styles.appName}>Yatra</Text>
      <View style={styles.rp}>
       <TouchableNativeFeedback>
-      <View style={styles.location}>
-       <Text style={styles.locationName}>Mumbai</Text>
-       <Text style={styles.arrowDown}>
-        <Icon name="sort-down" size={20} />
-       </Text>
-      </View>
-      </TouchableNativeFeedback>
-      <TouchableNativeFeedback>
         <View style={styles.icon}>
           {
           route.name === "Home" || route.name === "Schedule" ? 

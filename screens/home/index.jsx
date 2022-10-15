@@ -3,10 +3,10 @@ import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 import Header from '../../components/header'
 
-const Home = ({route}) => {
+const Home = ({route, navigation}) => {
   return (
     <View style={styles.container}>
-      <Header route={route} />
+      <Header route={route} navigation={navigation} />
     </View>
   )
 }

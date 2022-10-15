@@ -5,7 +5,7 @@ export const getLogs = async (accessToken) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      'Authorization': `Bearer ${accessToken}`,
     },
   })
     .then((res) => res.json())
@@ -26,7 +26,7 @@ export const createLog = async (accessToken, date, place) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      'Authorization': `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       date: String(dateString),

@@ -14,7 +14,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { createTag } from '../../apis/tagsapi';
 import FeedComponent from '../../components/feed/feedcomponent';
 
-const Feed = ({ route }) => {
+const Feed = ({ navigation, route }) => {
 	const [visible, setVisible] = React.useState(false);
 	const [errors, setErrors] = React.useState({
 		tag: '',
@@ -50,9 +50,9 @@ const Feed = ({ route }) => {
 
 	return (
 		<View style={styles.container}>
-			<Header route={route} />
+			<Header navigation={navigation} route={route} />
 			<Tags showModal={showModal} hideModal={hideModal} />
-      <FeedComponent />
+			<FeedComponent />
 			<Provider>
 				<Portal>
 					<Modal

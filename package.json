@@ -22,7 +22,8 @@
     "react-native-svg": "12.3.0",
     "react-native-vector-icons": "^9.2.0",
     "expo-secure-store": "~11.3.0",
-    "@expo/vector-icons": "^13.0.0"
+    "@expo/vector-icons": "^13.0.0",
+    "@react-native-community/datetimepicker": "6.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

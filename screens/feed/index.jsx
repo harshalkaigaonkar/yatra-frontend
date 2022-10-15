@@ -44,7 +44,8 @@ const Feed = ({ navigation, route }) => {
 			setErrors({ ...errors, message: 'an error occured' });
 			return;
 		}
-		setErrors({ ...errors, tag: '' });
+		console.log(data);
+		setErrors({ ...errors, message: '' });
 		hideModal();
 	};
 

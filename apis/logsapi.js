@@ -20,6 +20,8 @@ export const getLogs = async (accessToken) => {
 }
 
 export const createLog = async (accessToken, date, place) => {
+  const dateString = date.toISOString();
+  console.log(dateString);
   const data = await fetch(`${baseUrl}/log/create`, {
     method: 'POST',
     headers: {
@@ -27,8 +29,8 @@ export const createLog = async (accessToken, date, place) => {
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
-      date,
-      place,
+      date: String(dateString),
+      place: String(place),
     }),
   })
     .then((res) => res.json())

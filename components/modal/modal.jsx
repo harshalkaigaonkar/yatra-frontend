@@ -13,7 +13,6 @@ export default function ModalComponent({
 		backgroundColor: 'white',
 		padding: 20,
 		position: 'absolute',
-		// height: Dimensions.get('window').height * 0.4,
 	};
 	return (
 		<Provider>

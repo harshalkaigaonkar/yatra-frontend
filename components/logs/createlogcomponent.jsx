@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, Dimensions, Text } from 'react-native';
-import { DateTimePicker } from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { createLog } from '../../apis/logsapi';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, TextInput } from 'react-native-paper';
@@ -28,6 +28,7 @@ export default function CreateLogComponent({ hideModal }) {
 				setError('an error occured');
 				return;
 			}
+			console.log(data);
 			hideModal();
 		});
 	};

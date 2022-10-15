@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Agenda } from 'react-native-calendars';
-import { Card, Avatar, Button, Text } from 'react-native-paper';
+import { Card, Avatar, Button, Text, Modal } from 'react-native-paper';
 import Header from '../../components/header';
 import ModalComponent from '../../components/modal/modal';
 
@@ -20,9 +20,12 @@ const Schedule = ({ route, navigation }) => {
 	const [items, setItems] = useState({});
 	const [date, setDate] = useState(new Date());
 	const [visble, setVisible] = useState(false);
+	const [eventModalVisible, setEventModalVisible] = useState(false);
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const showModal = () => setVisible(true);
+	const showEventModal = () => setEventModalVisible(true);
 	const hideModal = () => setVisible(false);
+	const hideEventModal = () => setEventModalVisible(false);
 
 	useEffect(() => {});
 
@@ -46,7 +49,12 @@ const Schedule = ({ route, navigation }) => {
 			Object.keys(items).forEach((key) => {
 				newItems[key] = items[key];
 			});
-			setItems(newItems);
+			setItems([
+				{
+					type: 'Add event',
+				},
+				...newItems,
+			]);
 		}, 1000);
 	};
 
@@ -62,8 +70,22 @@ const Schedule = ({ route, navigation }) => {
 								alignItems: 'center',
 							}}
 						>
-							<Text>{item.name}</Text>
-							<Avatar.Text label='J' />
+							{item.type === 'Add event' ? (
+								<Button
+									icon='plus'
+									mode='contained'
+									onPress={() => {
+										showModal();
+									}}
+								>
+									<Text>Add event</Text>
+								</Button>
+							) : (
+								<>
+									<Text>{item.name}</Text>
+									<Avatar.Text label='J' />
+								</>
+							)}
 						</View>
 					</Card.Content>
 				</Card>
@@ -166,7 +188,7 @@ const Schedule = ({ route, navigation }) => {
 					<DateTimePicker
 						testID='dateTimePicker'
 						value={date}
-						mode={'date'}            
+						mode={'date'}
 						onChange={(event, selectedDate) => {
 							const currentDate = selectedDate;
 							setShow(false);
@@ -188,6 +210,26 @@ const Schedule = ({ route, navigation }) => {
 						Confirm
 					</Text>
 				</Button>
+			</ModalComponent>
+			<ModalComponent visible={eventModalVisible} hideModal={hideEventModal}>
+				<View
+					style={{
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						alignItems: 'center',
+						marginBottom: 20,
+					}}
+				>
+					<Text
+						style={{
+							fontSize: 20,
+							fontWeight: 'bold',
+							textAlign: 'center',
+						}}
+					>
+						Start from:{' '}
+					</Text>
+				</View>
 			</ModalComponent>
 		</View>
 	);

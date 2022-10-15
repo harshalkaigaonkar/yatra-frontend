@@ -15,7 +15,7 @@ export default function App() {
 		<AuthProvider>
 			<NavigationContainer>
 				<Stack.Navigator
-					initialRouteName='Login'
+					initialRouteName='Schedule'
 					screenOptions={{ headerShown: false }}
 				>
 					<Stack.Screen name='Schedule' component={Schedule} />

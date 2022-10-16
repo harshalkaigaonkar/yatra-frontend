@@ -3,20 +3,24 @@ import { Dimensions, ScrollView, View } from 'react-native';
 import { getTags } from '../../apis/tagsapi';
 import { useAuth } from '../../contexts/AuthContext';
 import { Text } from 'react-native-paper';
+import {Icon} from 'react-native-vector-icons/Ionicons'
 
 function Tag({ isSelected, name, id, selectTag }) {
 	return (
-		<Text
-			onPress={() => selectTag(id, isSelected)}
-			style={{
-				...styles.tag,
-				backgroundColor: isSelected ? 'gray' : 'white',
-				colo: isSelected ? 'white' : 'black',
-				borderColor: isSelected ? 'gray' : 'black',
-			}}
-		>
-			{name}
-		</Text>
+		<View>
+			<Icon name="location" size={30} />
+			<Text
+				onPress={() => selectTag(id, isSelected)}
+				style={{
+					...styles.tag,
+					backgroundColor: isSelected ? 'gray' : 'white',
+					colo: isSelected ? 'white' : 'black',
+					borderColor: isSelected ? 'gray' : 'black',
+				}}
+			>
+				{name}
+			</Text>
+		</View>
 	);
 }
 

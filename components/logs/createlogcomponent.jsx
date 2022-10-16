@@ -13,6 +13,7 @@ export default function CreateLogComponent({ hideModal }) {
 	const [error, setError] = useState('');
 
 	const handlePlaceChange = (text) => {
+
 		setPlace(text);
 	};
 
@@ -65,7 +66,7 @@ export default function CreateLogComponent({ hideModal }) {
 				value={place}
 				mode='outlined'
 				label={'destination'}
-				onChange={handlePlaceChange}
+				onChangeText={handlePlaceChange}
         style={{
           marginBottom: 20,
         }}

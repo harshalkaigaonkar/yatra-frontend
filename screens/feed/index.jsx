@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dimensions, View } from 'react-native';
 import Header from '../../components/header';
 import Tags from '../../components/tags';
@@ -13,13 +13,27 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { createTag } from '../../apis/tagsapi';
 import FeedComponent from '../../components/feed/feedcomponent';
+import { getPlaces } from '../../apis/logsapi';
 
 const Feed = ({ navigation, route }) => {
 	const [visible, setVisible] = React.useState(false);
 	const [errors, setErrors] = React.useState({
 		tag: '',
 	});
+	const [places, setPlaces] = React.useState([]);
 	const { state } = useAuth();
+	const [selectedPlace, setSelectedPlace] = React.useState('select');
+	const [selectedTag, setSelectedTag] = React.useState('select');
+
+	useEffect(() => {
+		getPlaces(state.accessToken).then((data) => {
+			setPlaces(
+				data
+					.map((place) => place.place)
+					.filter((place) => !place.includes('2') && !place.includes('['))
+			);
+		});
+	}, []);
 
 	const showModal = () => setVisible(true);
 	const hideModal = () => setVisible(false);
@@ -51,9 +65,18 @@ const Feed = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.container}>
-			<Header navigation={navigation} route={route} />
-			<Tags showModal={showModal} hideModal={hideModal} />
-			<FeedComponent />
+			<Header
+				onPlaceChange={setSelectedPlace}
+				places={places}
+				navigation={navigation}
+				route={route}
+			/>
+			<Tags
+				setSelectedTag={setSelectedTag}
+				showModal={showModal}
+				hideModal={hideModal}
+			/>
+			<FeedComponent selectedTag={selectedTag} selectedPlace={selectedPlace} />
 			<Provider>
 				<Portal>
 					<Modal

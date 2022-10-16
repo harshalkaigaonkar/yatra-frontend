@@ -7,6 +7,8 @@ import Feed from './screens/feed';
 import Login from './screens/login/Login';
 import Register from './screens/register/Register';
 import { AuthProvider } from './contexts/AuthContext';
+import Logs from './screens/Logs';
+import OtherLog from './screens/calendar/copycalendar';
 
 const Stack = createStackNavigator();
 
@@ -19,8 +21,11 @@ export default function App() {
 					screenOptions={{ headerShown: false }}
 				>
 					<Stack.Screen name='Schedule' component={Schedule} />
-					<Stack.Screen name='Home' component={Feed} />
+					<Stack.Screen name='Home' component={Home} />
+					<Stack.Screen name='Feed' component={Feed} />
+					<Stack.Screen name='Logs' component={Logs} />
 					<Stack.Screen name='Login' component={Login} />
+					<Stack.Screen name='Copy' component={OtherLog} />
 					<Stack.Screen name='Register' component={Register} />
 				</Stack.Navigator>
 			</NavigationContainer>

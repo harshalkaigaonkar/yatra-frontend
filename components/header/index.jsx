@@ -6,39 +6,107 @@ import {
 	View,
 } from 'react-native';
 import { Text } from 'react-native-paper';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
+import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const Header = ({ route, navigation }) => {
+const Header = ({ route, navigation, places, onPlaceChange }) => {
 	return (
 		<View style={styles.container}>
-			<Text style={styles.appName}>Yatra</Text>
+			<Text onPress={() => navigation.navigate('Home')} style={styles.appName}>
+				Yatra
+			</Text>
 			<View style={styles.rp}>
-						{route.name === 'Schedule' ? (
-							<TouchableNativeFeedback
-										onPress={() => {
-											navigation.navigate('Home');
-										}}
-									>
-								<View style={styles.icon}>
-									<Icon name='layer-group' size={30} color='black' />
-								</View>
-							</TouchableNativeFeedback>
-						) : (
-							<TouchableNativeFeedback
-									onPress={() => {
-										navigation.navigate('Schedule');
-									}}
-								>
-								<View style={styles.icon}>
-									<Icon name='calendar' size={30} color='black' />
-								</View>
-							</TouchableNativeFeedback>
-						)}
-					{/* </View>
+				{route.name === 'Schedule' && (
+					<TouchableNativeFeedback
+						onPress={() => {
+							navigation.navigate('Feed');
+						}}
+					>
+						<View style={styles.icon}>
+							<Icon name='layer-group' size={30} color='black' />
+						</View>
+					</TouchableNativeFeedback>
+				)}
+				{route.name === 'Feed' && (
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							paddingTop: 10,
+							justifyContent: 'space-between',
+							width: windowWidth * 0.4,
+						}}
+					>
+						<SelectDropdown
+							data={['select', ...places]}
+							defaultValue='select'
+							dropdownStyle={{
+								width: windowWidth * 0.4,
+							}}
+							buttonStyle={{
+								backgroundColor: 'white',
+								borderColor: 'black',
+								borderWidth: 1,
+								width: 100,
+								marginRight: 10,
+								height: 40,
+								borderRadius: 5,
+							}}
+							onSelect={(selectedItem, index) => {
+								onPlaceChange(selectedItem);
+							}}
+							buttonTextAfterSelection={(selectedItem, index) => {
+								// text represented after item is selected
+								// if data array is an array of objects then return selectedItem.property to render after item is selected
+								return selectedItem;
+							}}
+							rowTextForSelection={(item, index) => {
+								// text represented for each item in dropdown
+								// if data array is an array of objects then return item.property to represent item in dropdown
+								return item;
+							}}
+						/>
+						<TouchableNativeFeedback
+							onPress={() => {
+								navigation.navigate('Schedule');
+							}}
+						>
+							<Icon name='calendar' size={30} color='black' />
+						</TouchableNativeFeedback>
+					</View>
+				)}
+				{route.name === 'Home' && (
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							paddingTop: 10,
+							justifyContent: 'space-between',
+							width: windowWidth * 0.25,
+						}}
+					>
+						<TouchableNativeFeedback
+							onPress={() => {
+								navigation.navigate('Feed');
+							}}
+						>
+							<View style={styles.icon}>
+								<Icon name='layer-group' size={30} color='black' />
+							</View>
+						</TouchableNativeFeedback>
+						<TouchableNativeFeedback
+							onPress={() => {
+								navigation.navigate('Schedule');
+							}}
+						>
+							<Icon name='calendar' size={30} color='black' />
+						</TouchableNativeFeedback>
+					</View>
+				)}
+				{/* </View>
 				</TouchableNativeFeedback> */}
 			</View>
 		</View>
@@ -60,7 +128,7 @@ const styles = {
 	},
 	appName: {
 		fontSize: 20,
-		fontWeight: "900",
+		fontWeight: '900',
 	},
 	rp: {
 		width: 'auto',

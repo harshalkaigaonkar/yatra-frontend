@@ -7,7 +7,7 @@ import { Text } from 'react-native-paper';
 function Tag({ isSelected, name, id, selectTag }) {
 	return (
 		<Text
-			onPress={() => selectTag(id)}
+			onPress={() => selectTag(id, isSelected)}
 			style={{
 				...styles.tag,
 				backgroundColor: isSelected ? 'gray' : 'white',
@@ -20,35 +20,42 @@ function Tag({ isSelected, name, id, selectTag }) {
 	);
 }
 
-const Tags = ({ showModal }) => {
+const Tags = ({ showModal, setSelectedTag }) => {
 	const [tags, setTags] = React.useState([]);
 	const { state } = useAuth();
 
 	useEffect(() => {
-		getTags(state.accessToken).then((data) => {
-			setTags(
-				data.map((tagData) => {
-					return {
-						...tagData,
-						isSelected: false,
-					};
-				})
-			);
-		}).catch((err) => console.log(err));
+		getTags(state.accessToken)
+			.then((data) => {
+				setTags(
+					data.map((tagData) => {
+						return {
+							...tagData,
+							isSelected: false,
+						};
+					})
+				);
+			})
+			.catch((err) => console.log(err));
 	}, []);
 
-	const selectTag = (id) => {
-		setTags((prev) =>
-			prev.map((tag) => {
+	const selectTag = (id, isSelected) => {
+		const newTags = tags
+			.map((tag) => ({
+				...tag,
+				isSelected: false,
+			}))
+			.map((tag) => {
 				if (tag.id === id) {
+					setSelectedTag(!isSelected ? tag.name : 'select');
 					return {
 						...tag,
-						isSelected: !tag.isSelected,
+						isSelected: !isSelected,
 					};
 				}
 				return tag;
-			})
-		);
+			});
+		setTags(newTags);
 	};
 
 	return (
@@ -57,6 +64,7 @@ const Tags = ({ showModal }) => {
 				{!!tags.length &&
 					tags.map((tag) => (
 						<Tag
+							setSelectedTag={setSelectedTag}
 							key={tag.id}
 							name={tag.name}
 							id={tag.id}

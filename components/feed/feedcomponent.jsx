@@ -4,15 +4,16 @@ import { Card, Paragraph } from 'react-native-paper';
 import { getEvents } from '../../apis/eventsapi';
 import { useAuth } from '../../contexts/AuthContext';
 
-export default function FeedComponent() {
+export default function FeedComponent({ selectedPlace, selectedTag }) {
 	const [events, setEvents] = React.useState([]);
 	const { state } = useAuth();
 
 	React.useEffect(() => {
-		getEvents(state.accessToken).then((data) => {
-      setEvents(data);
+		getEvents(state.accessToken, selectedPlace, selectedTag).then((data) => {
+      console.log(data.length);
+			setEvents(data);
 		});
-	}, []);
+	}, [selectedPlace, selectedTag]);
 
 	return (
 		<ScrollView

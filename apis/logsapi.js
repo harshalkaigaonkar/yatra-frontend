@@ -1,4 +1,4 @@
-import { baseUrl } from './constants';
+import { baseUrl, pexelsAPI } from './constants';
 
 export const getLogs = async (accessToken) => {
 	const data = await fetch(`${baseUrl}/log/user`, {
@@ -81,6 +81,26 @@ export const getPlaces = async (accessToken) => {
 		});
 	return data;
 };
+
+export const getPlaceImg = async (place) => {
+	const data = await fetch(`${pexelsAPI(place)}`, {
+		method: 'GET',
+		headers: {
+			Authorization: `563492ad6f9170000100000161aa500f96024e9a91f368c795ae2b4a`,
+		},
+	})
+		.then((res) => res.json())
+		.then((data) => data)
+		.catch((error) => {
+			return {
+				msg: 'An error occurred',
+				type: 'error',
+			};
+		});
+		console.log(data)
+		// rate limit exceed ho rahi thi
+	return "hello";
+}
 
 export const getLogsByPlace = async (accessToken, place) => {
 	const data = await fetch(`${baseUrl}/log/place/${place}`, {

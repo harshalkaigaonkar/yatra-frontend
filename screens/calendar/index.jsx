@@ -187,13 +187,7 @@ const Schedule = ({ route, navigation }) => {
 					<TouchableNativeFeedback>
 						<Button
 							onPress={() => {
-								if (logs.length) {
-									if (logs[0].endDate) {
-										showModal();
-									} else {
-										endLog();
-									}
-								}
+								showModal();
 							}}
 							mode='elevated'
 							buttonColor='white'

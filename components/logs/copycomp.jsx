@@ -5,7 +5,7 @@ import { createLog, createLogCopy } from '../../apis/logsapi';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, TextInput } from 'react-native-paper';
 
-export default function CreateCopyComponent({ hideModal, logId }) {
+export default function CreateCopyComponent({ hideModal, logId, refresh }) {
 	const [date, setDate] = useState(new Date());
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const { state } = useAuth();
@@ -28,16 +28,17 @@ export default function CreateCopyComponent({ hideModal, logId }) {
 			return;
 		}
 
-    if(perday === ''){
-      setError('Please enter number of events per day');
-      return;
-    }
+		if (perday === '') {
+			setError('Please enter number of events per day');
+			return;
+		}
 
 		createLogCopy(state.accessToken, days, perday, logId, date).then((data) => {
 			if (data.error) {
 				setError('an error occured');
 				return;
 			}
+			refresh((prev) => prev + 1);
 			hideModal();
 		});
 	};

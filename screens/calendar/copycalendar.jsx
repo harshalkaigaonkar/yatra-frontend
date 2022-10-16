@@ -19,6 +19,7 @@ const OtherLog = ({ route, navigation }) => {
 	const [logDetails, setLogDetails] = useState({});
 	const [visible, setVisible] = useState(false);
 	const [markedDates, setMarkedDates] = useState({});
+	const [_, refresh] = useState(0);
 	const [date, setDate] = useState(
 		new Date(route.params.startDate).toISOString().split('T')[0]
 	);
@@ -91,17 +92,17 @@ const OtherLog = ({ route, navigation }) => {
 			color: 'black',
 			textColor: 'white',
 		};
-		// console.log('dates', dates);
-		// console.log('newItems', newItems);
+		console.log(newItems);
 		setItems(JSON.parse(JSON.stringify(newItems)));
 		setMarkedDates(dates);
 	};
 
 	useEffect(() => {
 		loadItems();
-	}, []);
+	}, [_]);
 
 	const renderItem = (item) => {
+		console.log(item, 'rendering');
 		return (
 			<View>
 				<TouchableOpacity style={{ marginRight: 10, marginTop: 20 }}>
@@ -115,6 +116,12 @@ const OtherLog = ({ route, navigation }) => {
 			</View>
 		);
 	};
+
+	let startDate = new Date(route.params.startDate).setDate(
+		new Date(route.params.startDate).getDate() + 2
+	);
+
+  startDate = new Date(startDate).toISOString().split('T')[0];
 
 	return (
 		<>
@@ -159,8 +166,8 @@ const OtherLog = ({ route, navigation }) => {
 					}}
 					items={items}
 					renderItem={renderItem}
+					selected={startDate}
 					showScrollIndicator={true}
-					// selected={date}
 					minDate={route.params.startDate}
 					maxDate={route.params.endDate}
 					theme={{
@@ -180,7 +187,11 @@ const OtherLog = ({ route, navigation }) => {
 				onBackButtonPress={hideModal}
 				onBackdropPress={hideModal}
 			>
-				<CreateCopyComponent logId={route.params.logId} hideModal={hideModal} />
+				<CreateCopyComponent
+					refresh={refresh}
+					logId={route.params.logId}
+					hideModal={hideModal}
+				/>
 			</BottomSheet>
 		</>
 	);

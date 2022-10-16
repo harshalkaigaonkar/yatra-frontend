@@ -32,6 +32,7 @@ const timeToString = (time) => {
 const Schedule = ({ route, navigation }) => {
 	const [items, setItems] = useState({});
 	const [logs, setLogs] = useState([]);
+	const [_, refresh] = useState(0);
 	const [toggle, setToggle] = useState('dot');
 	const [activeLogId, setActiveLogId] = useState('');
 	const [visble, setVisible] = useState(false);
@@ -116,7 +117,7 @@ const Schedule = ({ route, navigation }) => {
 
 	useEffect(() => {
 		loadItems();
-	}, []);
+	}, [_]);
 
 	const renderItem = (item) => {
 		return (
@@ -152,6 +153,7 @@ const Schedule = ({ route, navigation }) => {
 						<Card>
 							<Card.Content>
 								<Paragraph>{item.title}</Paragraph>
+								<Paragraph>{item?.content && item.content}</Paragraph>
 							</Card.Content>
 						</Card>
 					)}
@@ -214,8 +216,7 @@ const Schedule = ({ route, navigation }) => {
 						borderColor: 'whitesmoke',
 					}}
 					items={items}
-					loadItemsForMonth={loadItems}
-					selected={date}
+					// selected={date}
 					renderItem={renderItem}
 					showScrollIndicator={true}
 					minDate={'2022-09-01'}
@@ -227,8 +228,8 @@ const Schedule = ({ route, navigation }) => {
 						agendaKnobHeight: 10,
 						textDayMargin: 1,
 					}}
-					onDayPress={(data) => setDate(data.dateString)}
-					onDayLongPress={(data) => setDate(data.dateString)}
+					// onDayPress={(data) => setDate(data.dateString)}
+					// onDayLongPress={(data) => setDate(data.dateString)}
 					onCalendarToggled={(enabled) =>
 						enabled ? setToggle('period') : setToggle('dot')
 					}
@@ -243,6 +244,7 @@ const Schedule = ({ route, navigation }) => {
 				onBackdropPress={hideEventModal}
 			>
 				<AddEventComponent
+					refresh={refresh}
 					handleClose={hideEventModal}
 					activeLogId={activeLogId}
 				/>
@@ -252,7 +254,9 @@ const Schedule = ({ route, navigation }) => {
 				onBackButtonPress={hideModal}
 				onBackdropPress={hideModal}
 			>
-				<CreateLogComponent hideModal={hideModal} />
+				<CreateLogComponent
+					refresh={refresh}
+				hideModal={hideModal} />
 			</BottomSheet>
 		</>
 	);

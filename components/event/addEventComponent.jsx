@@ -6,7 +6,11 @@ import { getTags } from '../../apis/tagsapi';
 import { useAuth } from '../../contexts/AuthContext';
 import SelectDropdown from 'react-native-select-dropdown';
 
-export default function AddEventComponent({ activeLogId, handleClose }) {
+export default function AddEventComponent({
+	activeLogId,
+	handleClose,
+	refresh,
+}) {
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
 	const [errors, setErrors] = useState('');
@@ -56,6 +60,9 @@ export default function AddEventComponent({ activeLogId, handleClose }) {
 		}
 		setContent('');
 		setTitle('');
+		if (refresh) {
+			refresh((prev) => prev + 1);
+		}
 		handleClose();
 	};
 

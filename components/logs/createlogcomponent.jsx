@@ -5,7 +5,7 @@ import { createLog } from '../../apis/logsapi';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, TextInput } from 'react-native-paper';
 
-export default function CreateLogComponent({ hideModal }) {
+export default function CreateLogComponent({ hideModal, refresh }) {
 	const [date, setDate] = useState(new Date());
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const { state } = useAuth();
@@ -13,7 +13,6 @@ export default function CreateLogComponent({ hideModal }) {
 	const [error, setError] = useState('');
 
 	const handlePlaceChange = (text) => {
-
 		setPlace(text);
 	};
 
@@ -30,6 +29,9 @@ export default function CreateLogComponent({ hideModal }) {
 				return;
 			}
 			console.log(data);
+			if (refresh) {
+				refresh((prev) => prev + 1);
+			}
 			hideModal();
 		});
 	};
@@ -67,9 +69,9 @@ export default function CreateLogComponent({ hideModal }) {
 				mode='outlined'
 				label={'destination'}
 				onChangeText={handlePlaceChange}
-        style={{
-          marginBottom: 20,
-        }}
+				style={{
+					marginBottom: 20,
+				}}
 			/>
 			{!!showDatePicker && (
 				<DateTimePicker

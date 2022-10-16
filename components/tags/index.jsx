@@ -8,7 +8,6 @@ import {Icon} from 'react-native-vector-icons/Ionicons'
 function Tag({ isSelected, name, id, selectTag }) {
 	return (
 		<View>
-			<Icon name="location" size={30} />
 			<Text
 				onPress={() => selectTag(id, isSelected)}
 				style={{
@@ -18,7 +17,7 @@ function Tag({ isSelected, name, id, selectTag }) {
 					borderColor: isSelected ? 'gray' : 'black',
 				}}
 			>
-				{name}
+				#{name}
 			</Text>
 		</View>
 	);

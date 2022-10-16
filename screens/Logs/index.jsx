@@ -5,14 +5,20 @@ import { getLogs, getLogsByPlace, getPlaces } from '../../apis/logsapi';
 import Header from '../../components/header';
 import { useAuth } from '../../contexts/AuthContext';
 import { Card } from 'react-native-paper';
+import * as SecureStore from 'expo-secure-store';
 
 const Logs = ({ route, navigation }) => {
 	const [logs, setLogs] = React.useState([]);
 	const { state } = useAuth();
 
 	useEffect(() => {
-		getLogsByPlace(state.accessToken, route.params.place).then((data) => {
-			setLogs(data);
+		SecureStore.getItemAsync('pass-store').then((data) => {
+			if (data) {
+				const { username } = JSON.parse(data);
+				getLogsByPlace(state.accessToken, route.params.place).then((data) => {
+					setLogs(data.filter((log) => log.user.username !== username));
+				});
+			}
 		});
 	}, []);
 

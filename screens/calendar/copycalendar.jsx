@@ -12,20 +12,18 @@ import { BottomSheet } from 'react-native-btr';
 import AddEventComponent from '../../components/event/addEventComponent';
 import { getLogs, getLogsById } from '../../apis/logsapi';
 import { useAuth } from '../../contexts/AuthContext';
+import CreateCopyComponent from '../../components/logs/copycomp';
 
 const OtherLog = ({ route, navigation }) => {
 	const [items, setItems] = useState({});
 	const [logDetails, setLogDetails] = useState({});
-	const [toggle, setToggle] = useState('dot');
-	const [activeLogId, setActiveLogId] = useState('');
-	const [visble, setVisible] = useState(false);
+	const [visible, setVisible] = useState(false);
 	const [markedDates, setMarkedDates] = useState({});
 	const [date, setDate] = useState(
 		new Date(route.params.startDate).toISOString().split('T')[0]
 	);
-	const [eventModalVisible, setEventModalVisible] = useState(false);
 	const showModal = () => setVisible(true);
-	const showEventModal = () => setEventModalVisible(true);
+	const hideModal = () => setVisible(false);
 
 	const { state } = useAuth();
 
@@ -94,7 +92,7 @@ const OtherLog = ({ route, navigation }) => {
 			textColor: 'white',
 		};
 		// console.log('dates', dates);
-		console.log('newItems', newItems);
+		// console.log('newItems', newItems);
 		setItems(JSON.parse(JSON.stringify(newItems)));
 		setMarkedDates(dates);
 	};
@@ -136,7 +134,9 @@ const OtherLog = ({ route, navigation }) => {
 					<Text variant='titleLarge'>{route.params.username} log</Text>
 					<TouchableNativeFeedback>
 						<Button
-							onPress={() => {}}
+							onPress={() => {
+								showModal();
+							}}
 							mode='elevated'
 							buttonColor='white'
 							style={{
@@ -175,16 +175,13 @@ const OtherLog = ({ route, navigation }) => {
 					pastScrollRange={50}
 				/>
 			</View>
-			{/* <BottomSheet
-				visible={eventModalVisible}
-				onBackButtonPress={hideEventModal}
-				onBackdropPress={hideEventModal}
+			<BottomSheet
+				visible={visible}
+				onBackButtonPress={hideModal}
+				onBackdropPress={hideModal}
 			>
-				<AddEventComponent
-					handleClose={hideEventModal}
-					activeLogId={activeLogId}
-				/>
-			</BottomSheet> */}
+				<CreateCopyComponent logId={route.params.logId} hideModal={hideModal} />
+			</BottomSheet>
 		</>
 	);
 };

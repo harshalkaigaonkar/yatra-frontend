@@ -27,9 +27,7 @@ export const createLog = async (accessToken, date, place) => {
 			Authorization: `Bearer ${accessToken}`,
 		},
 		body: JSON.stringify({
-			date: new Date(date).toLocaleString(undefined, {
-				timeZone: 'Asia/Kolkata',
-			}),
+			date: new Date(date),
 			place,
 		}),
 	})
@@ -120,4 +118,30 @@ export const getLogsById = async (accessToken, logId) => {
 			};
 		});
 	return data;
-}
+};
+
+export const createLogCopy = async (accessToken, days, perday, logId, date) => {
+	const data = await fetch(`${baseUrl}/log/copy/`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`,
+		},
+		body: JSON.stringify({
+			days,
+			perday,
+			id: logId,
+			date: new Date(date),
+		}),
+	})
+		.then((res) => res.json())
+		.then((data) => data)
+		.catch((error) => {
+			return {
+				error: true,
+				msg: 'An error occurred',
+				type: 'error',
+			};
+		});
+	return data;
+};

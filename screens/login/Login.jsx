@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { login } from '../../apis/authapis';
 import { useAuth } from '../../contexts/AuthContext';
 
-export default function Login({ navigation }) {
+export default function Login({ route, navigation }) {
 	const [username, setUsername] = React.useState('');
 	const [password, setPassword] = React.useState('');
 	const [loading, setLoading] = React.useState(true);
@@ -20,10 +20,16 @@ export default function Login({ navigation }) {
 
 	React.useEffect(() => {
 		SecureStore.getItemAsync('pass-store').then((data) => {
-			console.log(data);
+			console.log('the auth data', data);
+			if (route?.params?.logout) {
+				SecureStore.deleteItemAsync('pass-store');
+				setLoading(false);
+				return;
+			}
 			if (data) {
 				const { username, password } = JSON.parse(data);
 				login(username, password).then((data) => {
+					console.log('the data', data);
 					if (data.type === 'error' || data.msg) {
 						SecureStore.deleteItemAsync('pass-store');
 						setLoading(false);
@@ -38,11 +44,11 @@ export default function Login({ navigation }) {
 						navigation.navigate('Home');
 					}
 				});
-			}else{
+			} else {
 				setLoading(false);
 			}
 		});
-	}, []);
+	}, [route?.params?.logout]);
 
 	const handleChangeUsername = (text) => {
 		setUsername(text);
@@ -64,7 +70,7 @@ export default function Login({ navigation }) {
 			return;
 		}
 		const data = await login(username, password);
-		console.log("the data from here", data);
+		console.log('the data from here', data);
 		if (data.type === 'error' || data.msg) {
 			setErrors({ ...errors, invalid: true });
 
@@ -74,7 +80,7 @@ export default function Login({ navigation }) {
 		}
 		await SecureStore.setItemAsync(
 			'pass-store',
-			JSON.stringify({ username, password }),
+			JSON.stringify({ username, password })
 		);
 		dispatch({
 			type: 'login',

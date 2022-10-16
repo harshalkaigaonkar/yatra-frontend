@@ -53,7 +53,12 @@ const Schedule = ({ route, navigation }) => {
 		const newItems = {};
 		fetchedLogs.forEach((data) => {
 			if (
-				data.startDate.split('T')[0] === new Date().toISOString().split('T')[0]
+				data.startDate.split('T')[0] <=
+					new Date().toISOString().split('T')[0] &&
+				(!data.endDate ||
+					(data.endDate &&
+						data.endDate.split('T')[0] >=
+							new Date().toISOString().split('T')[0]))
 			) {
 				console.log('here');
 				newItems[new Date().toISOString().split('T')[0]] = [
@@ -79,10 +84,9 @@ const Schedule = ({ route, navigation }) => {
 				}
 			});
 		});
-		console.log('new items', newItems);
 		setItems(newItems);
 		const dates = {};
-		if (fetchedLogs.length)
+		if (fetchedLogs.length) {
 			fetchedLogs.forEach((data) => {
 				const start = new Date(data.startDate);
 				const end = new Date(data.endDate);
@@ -92,6 +96,13 @@ const Schedule = ({ route, navigation }) => {
 					color: 'black',
 					textColor: 'white',
 				};
+				if (!newItems[data.startDate.split('T')[0]]) {
+					newItems[data.startDate.split('T')[0]] = [
+						{
+							title: 'No Events',
+						},
+					];
+				}
 				let i = new Date(start);
 				i = new Date(i.setDate(i.getDate() + 1));
 				while (i < end) {
@@ -99,6 +110,13 @@ const Schedule = ({ route, navigation }) => {
 						color: 'black',
 						textColor: 'white',
 					};
+					if (!newItems[i.toISOString().split('T')[0]]) {
+						newItems[i.toISOString().split('T')[0]] = [
+							{
+								title: 'No Events',
+							},
+						];
+					}
 					let newDate = i.setDate(i.getDate() + 1);
 					i = new Date(newDate);
 				}
@@ -111,7 +129,23 @@ const Schedule = ({ route, navigation }) => {
 					};
 				}
 			});
-		console.log(dates);
+		} else {
+			newItems[new Date().toISOString().split('T')[0]] = [
+				{
+					title: 'No events',
+				},
+			];
+		}
+		if (!newItems[new Date().toISOString().split('T')[0]]) {
+			newItems[new Date().toISOString().split('T')[0]] = [
+				{
+					title: 'No events',
+				},
+			];
+		}
+		// console.log('dates', dates);
+		// console.log('newITems', JSON.parse(JSON.stringify(newItems)));
+		setItems(newItems);
 		setMarkedDates(dates);
 	};
 
@@ -128,7 +162,6 @@ const Schedule = ({ route, navigation }) => {
 							icon='plus'
 							mode='contained'
 							onPress={() => {
-								// console.log('Pressed', item);
 								setActiveLogId(item.logId);
 								showEventModal();
 							}}
@@ -161,7 +194,6 @@ const Schedule = ({ route, navigation }) => {
 			</View>
 		);
 	};
-	// // console.log(toggle);
 
 	const endLog = async () => {
 		const res = await endLogRequest(state.accessToken, logs[0].id);
@@ -200,7 +232,7 @@ const Schedule = ({ route, navigation }) => {
 								height: 45,
 							}}
 						>
-							{logs.length ? (logs[0].endDate ? 'New' : 'End') : 'New'}
+							{'Create'}
 						</Button>
 					</TouchableNativeFeedback>
 				</View>
@@ -210,7 +242,7 @@ const Schedule = ({ route, navigation }) => {
 						borderColor: 'whitesmoke',
 					}}
 					items={items}
-					// selected={date}
+					selected={new Date().toISOString().split('T')[0]}
 					renderItem={renderItem}
 					showScrollIndicator={true}
 					minDate={'2022-09-01'}
@@ -218,7 +250,7 @@ const Schedule = ({ route, navigation }) => {
 					theme={{
 						agendaKnobColor: 'black',
 						selectedDayBackgroundColor: 'purple',
-						selectedDayColor: 'red',
+						selectedDayColor: 'black',
 						agendaKnobHeight: 10,
 						textDayMargin: 1,
 					}}
@@ -248,9 +280,7 @@ const Schedule = ({ route, navigation }) => {
 				onBackButtonPress={hideModal}
 				onBackdropPress={hideModal}
 			>
-				<CreateLogComponent
-					refresh={refresh}
-				hideModal={hideModal} />
+				<CreateLogComponent refresh={refresh} hideModal={hideModal} />
 			</BottomSheet>
 		</>
 	);

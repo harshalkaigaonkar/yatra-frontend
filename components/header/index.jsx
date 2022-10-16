@@ -8,6 +8,8 @@ import {
 import { Text } from 'react-native-paper';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import * as SecureStore from 'expo-secure-store';
+import { Button } from 'react-native-paper';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -106,8 +108,17 @@ const Header = ({ route, navigation, places, onPlaceChange }) => {
 						</TouchableNativeFeedback>
 					</View>
 				)}
-				{/* </View>
-				</TouchableNativeFeedback> */}
+				<Button
+					onPress={() => {
+						SecureStore.deleteItemAsync('pass-store');
+						navigation.navigate('Login', {logout: true});
+					}}
+					style={{
+						marginTop: 10,
+					}}
+				>
+					<Icon name='sign-out-alt' size={30} color='black' />
+				</Button>
 			</View>
 		</View>
 	);

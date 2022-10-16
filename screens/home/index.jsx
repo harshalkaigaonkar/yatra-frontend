@@ -6,6 +6,7 @@ import Header from '../../components/header';
 import { useAuth } from '../../contexts/AuthContext';
 import { Card } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import toTitleCase from '../../utils/helper';
 
 const Home = ({ route, navigation }) => {
 	const [places, setPlaces] = React.useState([]);
@@ -38,11 +39,17 @@ const Home = ({ route, navigation }) => {
 			}
 		});
 	}, []);
-	useEffect(() => {
-		places.forEach((place) => {
-			getPlaceImg(place).then((data) => {});
-		});
-	}, [places]);
+
+	// useEffect(() => {
+	// 	places.forEach((place) => {
+	// 		getPlaceImg(place).then((data) => {
+	// 			if (data) {
+	// 				console.log(data);
+	// 				setPlaceImg((prev) => ({ ...prev, [place]: data }));
+	// 			}
+	// 		});
+	// 	});
+	// }, [places]);
 
 	return (
 		<View style={styles.container}>
@@ -71,7 +78,7 @@ const Home = ({ route, navigation }) => {
 								}}
 								onPress={() => navigation.navigate('Logs', { place })}
 							>
-								<Card.Cover source={{ uri: `${placeImg[place]}` }} />
+								{/* <Card.Cover source={{ uri: `${placeImg[place]}` }} /> */}
 								<View
 									style={{
 										width: '100%',
@@ -82,7 +89,7 @@ const Home = ({ route, navigation }) => {
 									}}
 								>
 									<Icon name='location' size={30} />
-									<Card.Title title={place} />
+									<Card.Title title={toTitleCase(place)} />
 								</View>
 							</Card>
 						);

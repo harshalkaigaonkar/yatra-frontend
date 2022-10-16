@@ -86,6 +86,14 @@ const OtherLog = ({ route, navigation }) => {
 				},
 			];
 		}
+		if (!newItems[fetchedLog.startDate.split('T')[0]]) {
+			newItems[fetchedLog.startDate.split('T')[0]] = [
+				{
+					title: 'No events',
+					type: 'placeholder',
+				},
+			];
+		}
 
 		dates[fetchedLog.endDate.split('T')[0]] = {
 			endingDay: true,
@@ -102,7 +110,6 @@ const OtherLog = ({ route, navigation }) => {
 	}, [_]);
 
 	const renderItem = (item) => {
-		console.log(item, 'rendering');
 		return (
 			<View>
 				<TouchableOpacity style={{ marginRight: 10, marginTop: 20 }}>

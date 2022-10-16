@@ -4,6 +4,7 @@ import React from 'react';
 import { View } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { register } from '../../apis/authapis';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function Register({ navigation }) {
 	const [username, setUsername] = React.useState('');
@@ -15,6 +16,8 @@ export default function Register({ navigation }) {
 		password: '',
 		confirmPassword: '',
 	});
+
+	const { dispatch } = useAuth();
 
 	const handleChangeUsername = (text) => {
 		setUsername(text);
@@ -48,11 +51,18 @@ export default function Register({ navigation }) {
 			setErrors({ ...errors, confirmPassword: 'Confirm password is required' });
 			return;
 		}
-		const data = await register(username, password).then(async () => {
+		const data = await register(username, password).then(async (data) => {
 			await SecureStore.setItemAsync(
 				'pass-store',
 				JSON.stringify({ username, password })
 			);
+			dispatch({
+				type: 'login',
+				payload: {
+					accessToken: data.accessToken,
+					refreshToken: data.refreshToken,
+				},
+			});
 		}).catch(() => {
 			setErrors({ ...errors, username: 'Username already exists' });
 		});

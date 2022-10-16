@@ -3,6 +3,7 @@ import { Text, ScrollView } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import { getEvents } from '../../apis/eventsapi';
 import { useAuth } from '../../contexts/AuthContext';
+import toTitleCase from '../../utils/helper';
 
 export default function FeedComponent({ selectedPlace, selectedTag }) {
 	const [events, setEvents] = React.useState([]);
@@ -38,7 +39,7 @@ export default function FeedComponent({ selectedPlace, selectedTag }) {
                 style={{
                   alignSelf: 'flex-end',
                 }}
-              >{event.log.place}</Text>
+              >{toTitleCase(event.log.place)}</Text>
 						</Card.Content>
 					</Card>
 				))}

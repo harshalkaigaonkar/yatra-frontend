@@ -58,11 +58,11 @@ export default function AddEventComponent({
 			setErrors(data.msg);
 			return;
 		}
-		setContent('');
-		setTitle('');
 		if (refresh) {
 			refresh((prev) => prev + 1);
 		}
+		setContent('');
+		setTitle('');
 		handleClose();
 	};
 

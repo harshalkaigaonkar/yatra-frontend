@@ -97,9 +97,8 @@ export const getPlaceImg = async (place) => {
 				type: 'error',
 			};
 		});
-		console.log(data)
 		// rate limit exceed ho rahi thi
-	return "hello";
+		return data;
 }
 
 export const getLogsByPlace = async (accessToken, place) => {

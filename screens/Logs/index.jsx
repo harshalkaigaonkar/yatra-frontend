@@ -6,6 +6,7 @@ import Header from '../../components/header';
 import { useAuth } from '../../contexts/AuthContext';
 import { Card } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
+import toTitleCase from '../../utils/helper';
 
 const Logs = ({ route, navigation }) => {
 	const [logs, setLogs] = React.useState([]);
@@ -46,9 +47,15 @@ const Logs = ({ route, navigation }) => {
 							}}
 						>
 							<Card.Title
-								title={`${log.startDate.split('T')[0]}  to  ${
-									log.endDate.split('T')[0]
-								}`}
+								title={`${new Date(log.startDate.split('T')[0])
+									.toString()
+									.split(' ')
+									.slice(1, 4)
+									.join(' ')}  to  ${new Date(log.endDate.split('T')[0])
+									.toString()
+									.split(' ')
+									.slice(1, 4)
+									.join(' ')}`}
 								subtitle={log.user.username}
 							/>
 							<Card.Content>
@@ -57,7 +64,7 @@ const Logs = ({ route, navigation }) => {
 										alignSelf: 'flex-end',
 									}}
 								>
-									{log.place}
+									{toTitleCase(log.place.toString())}
 								</Text>
 							</Card.Content>
 						</Card>

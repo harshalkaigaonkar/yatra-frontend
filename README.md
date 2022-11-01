@@ -9,6 +9,13 @@
 
 Backend is here [https://github.com/hdck007/yatra-backend](https://github.com/hdck007/yatra-backend)
 
+![Screenshot_2022-10-16-20-37-39-27_f73b71075b1de7323614b647fe394240](https://user-images.githubusercontent.com/68905333/199244208-324f932c-f272-4bbd-8fb0-4285b2a44438.jpg)
+
+![Screenshot_2022-10-16-20-28-59-89_f73b71075b1de7323614b647fe394240](https://user-images.githubusercontent.com/68905333/199244261-db9c7287-b20e-4e07-a749-439cb9b9026b.jpg)
+
+
+
+
 ### Development
 - Clone the repo
 - run the server

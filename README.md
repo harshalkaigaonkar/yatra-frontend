@@ -14,12 +14,12 @@ Backend is here [https://github.com/hdck007/yatra-backend](https://github.com/hd
 
 ### Development
 - Clone the repo
-- run the server
+- run the development server
  - ``` cd yatra-frontend ```
  
  - ``` npm install ```
  
- - ``` npm run dev ```
+ - ``` npm start ```
  
 ### Bug / Feature Request
 
@@ -29,9 +29,9 @@ If you'd like to request a new function, feel free to do so by opening an issue.
 
 
 ## Built with 
-- Expressjs
-- Prisma
-- PlanetscaleDB
+- Expo
+- React Native
+- React Native Paper
 
 ## Team
 
